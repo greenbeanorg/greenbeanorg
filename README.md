@@ -1,4 +1,4 @@
-# greenbeanorg — Andy Alexander's Homelab
+# greenbeanorg — Andy's Homelab
 
 Multi-site homelab infrastructure, documented as production-style runbooks. I'm a Linux systems administrator and this is where I design, break, fix, and document infrastructure.
 
@@ -65,4 +65,4 @@ flowchart TB
 - Beta tester for XGS-PON ONT-on-a-stick ([pon.wiki guide](https://pon.wiki/guides/masquerade-as-the-att-inc-bgw320-500-505-with-the-was-110/))
 
 ---
-📫 andy.alexander@gmail.com · Ormond Beach, FL · open to remote systems/NOC roles
+📫 andy.alexander@gmail.com · Ormond Beach, FL · open to remote systems roles
