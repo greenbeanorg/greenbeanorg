@@ -1,6 +1,6 @@
 # greenbeanorg — Andy's Homelab
 
-Multi-site homelab infrastructure, documented as production-style runbooks. I'm a Linux systems administrator and this is where I design, break, fix, and document infrastructure.
+Multi-site homelab infrastructure, documented as production-style runbooks. I'm a Linux systems engineer and this is where I design, break, fix, and document infrastructure.
 
 **Everything here is real and running** — three Proxmox hosts across two sites, ZFS storage on TrueNAS SCALE, OPNsense edge routing over XGS-PON fiber, automated verified backups, and a containerized service stack.
 
