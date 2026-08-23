@@ -65,4 +65,4 @@ flowchart TB
 - Beta tester for XGS-PON ONT-on-a-stick ([pon.wiki guide](https://pon.wiki/guides/masquerade-as-the-att-inc-bgw320-500-505-with-the-was-110/))
 
 ---
-📫 [redacted] · Ormond Beach, FL · open to remote systems roles
+Ormond Beach, FL · open to remote systems roles
