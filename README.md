@@ -24,15 +24,19 @@ flowchart TB
     end
 
     subgraph WU [wu — Proxmox host, ODROID-H3]
-        FW[OPNsense VM<br/>Router / Firewall]
+        FW[OPNsense VM — Router / Firewall<br/>Kea DHCPv4 · option 6 hands out both resolvers]
     end
 
-    subgraph LAN [Local Network]
-        PH[Pi-hole DNS<br/>ODROID-XU4]
-        SW1[swearengen<br/>Proxmox Host + TrueNAS SCALE VM<br/>ZFS RAIDZ1 pool — PCIe SATA passthrough]
-        FARN[farnum<br/>Plex Media Server VM over NFS]
+    PH1[pihole · ODROID-XU4<br/>Armbian 26.8 / kernel 6.6<br/>Pi-hole in Docker — <b>primary DNS</b>]
+
+    subgraph SWG [swearengen — Proxmox host, i5-10600K / 48GB]
+        PH2[pihole2 · LXC<br/>Pi-hole, host install — <b>secondary DNS</b>]
+        NAS[TrueNAS SCALE VM<br/>ZFS RAIDZ1 pool — PCIe SATA passthrough]
+        FARN[farnum — Plex Media Server VM over NFS]
         HA[Home Assistant VM]
     end
+
+    CLIENTS[LAN clients]
 
     subgraph REMOTE [Remote Site]
         RPX[Remote Proxmox<br/>Pi-hole + LinuxGSM game server]
@@ -43,12 +47,35 @@ flowchart TB
     INET --- ONT --- BW
     BW ---|"wu NIC 1 → WAN vNIC"| FW
     FW ---|"LAN vNIC → wu NIC 2"| BL
-    BL --- LAN
-    LAN -. WireGuard/SSH .- REMOTE
-    LAN -. restic over SFTP .- VPS
+    BL --- CLIENTS
+    BL --- PH1
+    BL --- SWG
+    CLIENTS -. "resolver 1" .-> PH1
+    CLIENTS -. "resolver 2" .-> PH2
+    SWG -. WireGuard/SSH .- REMOTE
+    SWG -. restic over SFTP .- VPS
 ```
 
-**Traffic path:** fiber terminates on the ONT SFP+ in the switch's isolated **bridge-WAN**, which hands off to a dedicated NIC on `wu`; the OPNsense VM routes/firewalls and sends LAN-bound traffic out a second NIC back into the switch's **bridge-LAN** — router-on-a-VM with a physical hairpin through the CRS310.
+**Traffic path:** fiber terminates on the ONT SFP+ in the switch's isolated
+**bridge-WAN**, which hands off to a dedicated NIC on `wu`; the OPNsense VM
+routes/firewalls and sends LAN-bound traffic out a second NIC back into the
+switch's **bridge-LAN** — router-on-a-VM with a physical hairpin through the
+CRS310.
+
+**DNS resiliency:** Kea DHCPv4 on OPNsense advertises two Pi-hole resolvers via
+option 6 (`domain-name-servers`), deliberately placed in **different failure
+domains** — the primary is a standalone ODROID-XU4, the secondary an LXC on
+`swearengen` — so patching or rebooting either one leaves name resolution
+intact. Full design and rebuild procedure: **[DNS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md)**.
+
+| | Primary | Secondary |
+| --- | --- | --- |
+| Host | `pihole` — ODROID-XU4, Armbian | `pihole2` — LXC on `swearengen` |
+| Address | `10.x.x.250` | `10.x.x.249` |
+| Install method | Docker, pinned image tag | Host install (`curl \| bash`) |
+| Failure domain | Standalone ARM SBC | Proxmox guest |
+| Config source of truth | Teleporter export | Teleporter import from primary |
+
 
 ## Current projects
 
