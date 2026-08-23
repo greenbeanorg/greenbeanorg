@@ -24,13 +24,13 @@ flowchart TB
     end
 
     subgraph WU [wu — Proxmox host, ODROID-H3]
-        FW[OPNsense VM — Router / Firewall<br/>Kea DHCPv4 · option 6 hands out both resolvers]
+        FW[OPNsense VM — Router / Firewall<br/>Kea DHCPv4 · option 6 hands out both resolvers<br/>WireGuard spoke]
+        PH2[pihole2 · LXC<br/>Pi-hole, host install — <b>secondary DNS</b>]
     end
 
     PH1[pihole · ODROID-XU4<br/>Armbian 26.8 / kernel 6.6<br/>Pi-hole in Docker — <b>primary DNS</b>]
 
     subgraph SWG [swearengen — Proxmox host, i5-10600K / 48GB]
-        PH2[pihole2 · LXC<br/>Pi-hole, host install — <b>secondary DNS</b>]
         NAS[TrueNAS SCALE VM<br/>ZFS RAIDZ1 pool — PCIe SATA passthrough]
         FARN[farnum — Plex Media Server VM over NFS]
         HA[Home Assistant VM]
@@ -38,8 +38,11 @@ flowchart TB
 
     CLIENTS[LAN clients]
 
+    KK1[kk1 · Oracle Cloud Ampere A1<br/>WireGuard hub — static endpoint<br/>routes between all sites]
+
     subgraph REMOTE [Remote Site]
         RPX[Remote Proxmox<br/>Pi-hole + LinuxGSM game server]
+        ZOM[zombie · Debian VM<br/>WireGuard spoke + subnet router]
     end
 
     VPS[vps1<br/>Off-site restic backup target — SFTP]
@@ -52,7 +55,9 @@ flowchart TB
     BL --- SWG
     CLIENTS -. "resolver 1" .-> PH1
     CLIENTS -. "resolver 2" .-> PH2
-    SWG -. WireGuard/SSH .- REMOTE
+    FW == "WireGuard" ==> KK1
+    ZOM == "WireGuard" ==> KK1
+    ZOM --- RPX
     SWG -. restic over SFTP .- VPS
 ```
 
