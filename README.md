@@ -84,17 +84,18 @@ intact. Full design and rebuild procedure: **[DNS.md](https://github.com/greenbe
 
 ## Current projects
 
+- **Off-site backup rebuild** — restic repository and schedules being reconstructed after the TrueNAS ZFS migration invalidated the previous dataset paths
 - **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
 - **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
 - **VLAN segmentation** — redesigning the flat L2 network into trust zones on the CRS310
 
 ## Recently completed
 
-- 30TB storage migration: mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough ([runbook](https://github.com/greenbeanorg/homelab-docs))
-- SSHFS → NFS for all cross-host storage access
-- Automated restic backups across all sites with 90-day retention and scheduled integrity verification
-- PowerPanel (pwrstat) → NUT UPS monitoring conversion (in progress, one host complete)
-- Beta tester for XGS-PON ONT-on-a-stick ([pon.wiki guide](https://pon.wiki/guides/masquerade-as-the-att-inc-bgw320-500-505-with-the-was-110/))
+- Multi-site WireGuard overlay: hub-and-spoke through a cloud instance, so neither residential site needs inbound reachability — subnet routing to a second site plus full-tunnel roaming clients ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/WIREGUARD.md))
+- Declarative availability monitoring: Uptime Kuma with the monitor set defined in YAML and reconciled by script, so it's version-controlled rather than click-configured ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/UPTIME-KUMA.md))
+- Redundant DNS resolvers in separate failure domains, advertised by OPNsense Kea DHCPv4 option 6 ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md))
+- 30TB storage migration: mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md))
+- NFS for all cross-host storage access
 
 ---
-Ormond Beach, FL · open to remote systems roles
+Ormond Beach, FL · open to remote syseng roles
