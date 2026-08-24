@@ -24,8 +24,8 @@ flowchart TB
     end
 
     subgraph WU [wu — Proxmox host, ODROID-H3]
-        FW[OPNsense VM — Router / Firewall<br/>Kea DHCPv4 · option 6 hands out both resolvers<br/>WireGuard spoke]
-        PH2[pihole2 · LXC<br/>Pi-hole, host install — <b>secondary DNS</b>]
+        FW[OPNsense VM — Router / Firewall<br/>Kea DHCPv4 · option 6 hands out both resolvers]
+        PH2[pihole2 · LXC 1000<br/>Pi-hole, host install — <b>secondary DNS</b>]
     end
 
     PH1[pihole · ODROID-XU4<br/>Armbian 26.8 / kernel 6.6<br/>Pi-hole in Docker — <b>primary DNS</b>]
@@ -38,11 +38,8 @@ flowchart TB
 
     CLIENTS[LAN clients]
 
-    KK1[kk1 · Oracle Cloud Ampere A1<br/>WireGuard hub — static endpoint<br/>routes between all sites]
-
     subgraph REMOTE [Remote Site]
         RPX[Remote Proxmox<br/>Pi-hole + LinuxGSM game server]
-        ZOM[zombie · Debian VM<br/>WireGuard spoke + subnet router]
     end
 
     VPS[vps1<br/>Off-site restic backup target — SFTP]
@@ -55,9 +52,7 @@ flowchart TB
     BL --- SWG
     CLIENTS -. "resolver 1" .-> PH1
     CLIENTS -. "resolver 2" .-> PH2
-    FW == "WireGuard" ==> KK1
-    ZOM == "WireGuard" ==> KK1
-    ZOM --- RPX
+    SWG -. WireGuard/SSH .- REMOTE
     SWG -. restic over SFTP .- VPS
 ```
 
@@ -70,15 +65,16 @@ CRS310.
 **DNS resiliency:** Kea DHCPv4 on OPNsense advertises two Pi-hole resolvers via
 option 6 (`domain-name-servers`), deliberately placed in **different failure
 domains** — the primary is a standalone ODROID-XU4, the secondary an LXC on
-`swearengen` — so patching or rebooting either one leaves name resolution
-intact. Full design and rebuild procedure: **[DNS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md)**.
+`wu`. Neither sits on `swearengen`, so storage and hypervisor maintenance never
+touches name resolution. Full design and rebuild procedure:
+**[DNS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md)**.
 
 | | Primary | Secondary |
 | --- | --- | --- |
-| Host | `pihole` — ODROID-XU4, Armbian | `pihole2` — LXC on `swearengen` |
+| Host | `pihole` — ODROID-XU4, Armbian | `pihole2` — LXC 1000 on `wu` |
 | Address | `10.x.x.250` | `10.x.x.249` |
 | Install method | Docker, pinned image tag | Host install (`curl \| bash`) |
-| Failure domain | Standalone ARM SBC | Proxmox guest |
+| Failure domain | Standalone ARM SBC | Proxmox guest, router host |
 | Config source of truth | Teleporter export | Teleporter import from primary |
 
 
