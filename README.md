@@ -6,10 +6,9 @@ Multi-site homelab infrastructure, documented as production-style runbooks. I'm 
 
 ## Repositories
 
-| Repo | What it is |
-|---|---|
-| [homelab-docs](https://github.com/greenbeanorg/homelab-docs) | Runbooks and design docs: storage, backup, networking, power, services |
-| [homelab](https://github.com/greenbeanorg/homelab) | Sanitized configs: Docker Compose stacks, NUT, restic scripts, tooling |
+**[homelab-docs](https://github.com/greenbeanorg/homelab-docs)** — runbooks and design
+docs covering storage, backup, networking, power, and services. Each one records what was
+built, why that approach, what broke, and how to rebuild it from nothing.
 
 ## Network at a glance
 
