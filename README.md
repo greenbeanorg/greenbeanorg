@@ -26,7 +26,7 @@ flowchart TB
     end
 
     subgraph WU [wu — Proxmox host, ODROID-H3]
-        FW[OPNsense VM — Router / Firewall<br/>Kea DHCPv4 · option 6 hands out both resolvers]
+        FW[OPNsense VM — Router / Firewall<br/>Kea DHCPv4 · option 6 hands out both resolvers<br/>WireGuard spoke]
         PH2[pihole2 · LXC 1000<br/>Pi-hole, host install — <b>secondary DNS</b>]
     end
 
@@ -40,11 +40,12 @@ flowchart TB
 
     CLIENTS[LAN clients]
 
+    KK1[kk1 · Oracle Cloud Ampere A1<br/>WireGuard hub — static public endpoint<br/>off-site restic target]
+
     subgraph REMOTE [Remote Site]
+        ZOM[zombie · Debian VM<br/>WireGuard spoke + subnet router]
         RPX[Remote Proxmox<br/>Pi-hole + LinuxGSM game server]
     end
-
-    VPS[vps1<br/>Off-site restic backup target — SFTP]
 
     INET --- ONT --- BW
     BW ---|"wu NIC 1 → WAN vNIC"| FW
@@ -54,8 +55,10 @@ flowchart TB
     BL --- SWG
     CLIENTS -. "resolver 1" .-> PH1
     CLIENTS -. "resolver 2" .-> PH2
-    SWG -. WireGuard/SSH .- REMOTE
-    SWG -. restic over SFTP .- VPS
+    FW == "WireGuard" ==> KK1
+    ZOM == "WireGuard" ==> KK1
+    ZOM --- RPX
+    SWG -. restic over SFTP .- KK1
 ```
 
 **Traffic path:** fiber terminates on the ONT SFP+ in the switch's isolated
