@@ -1,4 +1,4 @@
-# greenbeanorg — Andy's Homelab
+# greenbeanorg — Linux Infrastructure Lab
 
 Linux Systems Engineer / Infrastructure Engineer
 
