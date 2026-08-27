@@ -83,13 +83,6 @@ touches name resolution. Full design and rebuild procedure:
 | Config source of truth | Teleporter export | Teleporter import from primary |
 
 
-## Current projects
-
-- **Off-site backup rebuild** — restic repository and schedules being reconstructed after the TrueNAS ZFS migration invalidated the previous dataset paths
-- **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
-- **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
-- **VLAN segmentation** — redesigning the flat L2 network into trust zones on the CRS310
-
 ## Recently completed
 
 - Multi-site WireGuard overlay: hub-and-spoke through a cloud instance, so neither residential site needs inbound reachability — subnet routing to a second site plus full-tunnel roaming clients ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/WIREGUARD.md))
@@ -97,6 +90,14 @@ touches name resolution. Full design and rebuild procedure:
 - Redundant DNS resolvers in separate failure domains, advertised by OPNsense Kea DHCPv4 option 6 ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md))
 - 30TB storage migration: mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md))
 - NFS for all cross-host storage access
+
+## Current projects
+
+- **Off-site backup rebuild** — restic repository and schedules being reconstructed after the TrueNAS ZFS migration invalidated the previous dataset paths
+- **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
+- **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
+- **VLAN segmentation** — redesigning the flat L2 network into trust zones on the CRS310
+
 
 ---
 Ormond Beach, FL · open to remote syseng roles
