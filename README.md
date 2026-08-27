@@ -93,10 +93,10 @@ touches name resolution. Full design and rebuild procedure:
 
 ## Current projects
 
-- **Off-site backup rebuild** — restic repository and schedules being reconstructed after the TrueNAS ZFS migration invalidated the previous dataset paths
-- **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
-- **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
-- **VLAN segmentation** — redesigning the flat L2 network into trust zones on the CRS310
+- **Ansible fleet management — converting host configuration to reusable roles across sites.
+- **Monitoring modernization — migrating fleet monitoring toward Prometheus, Grafana, and node_exporter.
+- **VLAN segmentation — redesigning the flat L2 network into trust zones on the CRS310.
+- **Off-site backup rebuild — reconstructing restic repository paths following the TrueNAS/ZFS migration.
 
 
 ---
