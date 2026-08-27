@@ -1,6 +1,7 @@
 # greenbeanorg — Linux Infrastructure Lab
 
-Linux Systems Engineer / Infrastructure Engineer
+Systems Engineer / Network & Infrastructure Engineer
+
 
 Multi-site Linux infrastructure lab focused on automation, virtualization, networking, storage, monitoring, backup/recovery, and operational reliability.
 
