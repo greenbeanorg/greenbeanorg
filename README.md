@@ -1,18 +1,53 @@
-# [greenbeanorg](https://greenbean.org) — Linux Infrastructure Lab
+# Systems Engineer — Network & Infrastructure
 
-Systems Engineer / Network & Infrastructure Engineer
+Multi-site Linux infrastructure lab: three Proxmox hosts across two sites, OPNsense edge routing
+over XGS-PON fiber, ZFS on TrueNAS SCALE, a WireGuard overlay, and a containerized service stack.
+**15 runbooks, ~5,500 lines** — each records what was built, why that approach, what broke, and how
+to rebuild it from nothing.
 
+**Stack:** Proxmox VE · KVM/LXC · Debian / Rocky / Fedora / Armbian · ZFS · TrueNAS SCALE · NFS/SMB ·
+OPNsense · MikroTik RouterOS · VLANs · Kea DHCP · Pi-hole · Unbound · WireGuard · Docker Compose ·
+Ansible · Python · NetBox · Uptime Kuma · restic · NUT · Wazuh · Git
 
-Multi-site Linux infrastructure lab focused on automation, virtualization, networking, storage, monitoring, backup/recovery, and operational reliability.
+---
 
-Everything here is real infrastructure that I design, automate, break, recover, and document.
+## Documentation index — [greenbeanorg/homelab-docs](https://github.com/greenbeanorg/homelab-docs)
 
+### Networking
 
-## Repositories
+| Runbook | Covers |
+| --- | --- |
+| [VLAN-SEGMENTATION.md](https://github.com/greenbeanorg/homelab-docs/blob/main/VLAN-SEGMENTATION.md) | Flat L2 → segmented trust zones across the CRS310, OPNsense, both Proxmox hosts, an access switch, and the APs |
+| [DNS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md) | Redundant Pi-hole resolvers in separate failure domains, advertised by Kea DHCPv4 option 6 — plus the failure modes DHCP resolver lists actually have |
+| [UNBOUND.md](https://github.com/greenbeanorg/homelab-docs/blob/main/UNBOUND.md) | Per-host recursive, DNSSEC-validating resolver replacing the public upstream on both Pi-holes — validation, cutover, rollback |
+| [PIHOLE-DOCKER.md](https://github.com/greenbeanorg/homelab-docs/blob/main/PIHOLE-DOCKER.md) | Primary resolver build on bare Armbian — freeing `:53` from systemd-resolved, armhf image constraints, compose layout |
+| [ODROID-XU4.md](https://github.com/greenbeanorg/homelab-docs/blob/main/ODROID-XU4.md) | Moving the DNS host off an orphaned vendor kernel onto maintained Armbian — U-Boot boot flow and an eMMC reflash with a rollback path |
+| [WIREGUARD.md](https://github.com/greenbeanorg/homelab-docs/blob/main/WIREGUARD.md) | Hub-and-spoke overlay through a cloud instance so neither residential site needs inbound reachability — subnet routing plus roaming full-tunnel clients |
+| [IPV6.md](https://github.com/greenbeanorg/homelab-docs/blob/main/IPV6.md) | Per-VLAN `/64` allocation plan out of the delegated prefix |
 
-**[homelab-docs](https://github.com/greenbeanorg/homelab-docs)** — runbooks and design
-docs covering storage, backup, networking, power, and services. Each one records what was
-built, why that approach, what broke, and how to rebuild it from nothing.
+### Monitoring & inventory
+
+| Runbook | Covers |
+| --- | --- |
+| [UPTIME-KUMA.md](https://github.com/greenbeanorg/homelab-docs/blob/main/UPTIME-KUMA.md) | Declarative availability monitoring — monitors defined in YAML and reconciled by a Python script, so the monitor set is version-controlled rather than click-configured |
+| [NETBOX.md](https://github.com/greenbeanorg/homelab-docs/blob/main/NETBOX.md) | NetBox with PostgreSQL and Valkey on Docker Compose as the fleet source of truth |
+| [NETBOX-INVENTORY.md](https://github.com/greenbeanorg/homelab-docs/blob/main/NETBOX-INVENTORY.md) | YAML-driven inventory population — idempotent create/update/no-op, non-destructive by design |
+| [LAN-DEVICE-WATCHER.md](https://github.com/greenbeanorg/homelab-docs/blob/main/LAN-DEVICE-WATCHER.md) | Containerized LAN discovery on the Docker host — sweeps the segment and surfaces devices that aren't in inventory |
+
+### Storage & power
+
+| Runbook | Covers |
+| --- | --- |
+| [TRUENAS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md) | 30 TB migration, mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 — PCIe SATA controller passthrough, pool and dataset design, dual SMB/NFS shares under a unified identity |
+| [SMART-DOCTOR.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SMART-DOCTOR.md) | smartmontools health baseline and extended self-test management across the 4 × 10 TB pool |
+| [TRUENAS-UPS-REPORTING.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS-UPS-REPORTING.md) | Root-causing blank UPS charts under NUT netclient mode (NAS-132924) — a config override that avoids the immutable rootfs and survives OS upgrades |
+| [UPS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/UPS.md) | UPS monitoring conversion from PowerPanel (`pwrstat`) to NUT |
+
+Every doc follows the same shape: summary block, numbered sections, a known-limitations section
+where the honest tradeoffs go, and a quick-reference table for the things you look up at 2am.
+Sanitization is enforced by a pre-commit hook, not by memory.
+
+---
 
 ## Network at a glance
 
@@ -83,22 +118,27 @@ touches name resolution. Full design and rebuild procedure:
 | Failure domain | Standalone ARM SBC | Proxmox guest, router host |
 | Config source of truth | Teleporter export | Teleporter import from primary |
 
+---
 
 ## Recently completed
 
-- Multi-site WireGuard overlay: hub-and-spoke through a cloud instance, so neither residential site needs inbound reachability — subnet routing to a second site plus full-tunnel roaming clients ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/WIREGUARD.md))
-- Declarative availability monitoring: Uptime Kuma with the monitor set defined in YAML and reconciled by script, so it's version-controlled rather than click-configured ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/UPTIME-KUMA.md))
-- Redundant DNS resolvers in separate failure domains, advertised by OPNsense Kea DHCPv4 option 6 ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md))
-- 30TB storage migration: mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md))
-- NFS for all cross-host storage access
+- **Multi-site WireGuard overlay** — hub-and-spoke through a cloud instance, so neither residential site needs inbound reachability; subnet routing to a second site plus full-tunnel roaming clients
+- **Declarative availability monitoring** — Uptime Kuma with the monitor set defined in YAML and reconciled by script, version-controlled rather than click-configured
+- **Redundant DNS resolvers** in separate failure domains, advertised by OPNsense Kea DHCPv4 option 6, with per-host Unbound recursion underneath
+- **30 TB storage migration** — mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough
+- **NFS** for all cross-host storage access
 
 ## Current projects
 
-- **Ansible fleet management — converting host configuration to reusable roles across sites.
-- **Monitoring modernization — migrating fleet monitoring toward Prometheus, Grafana, and node_exporter.
-- **VLAN segmentation — redesigning the flat L2 network into trust zones on the CRS310.
-- **Off-site backup rebuild — reconstructing restic repository paths following the TrueNAS/ZFS migration.
+- **VLAN segmentation** — redesigning the flat L2 network into trust zones on the CRS310, OPNsense, and both hypervisors
+- **Ansible fleet management** — converting host configuration to reusable roles across sites
+- **Monitoring modernization** — migrating fleet monitoring toward Prometheus, Grafana, and node_exporter
+- **Off-site backup rebuild** — reconstructing restic repository paths following the TrueNAS/ZFS migration
 
+## Repositories
+
+**[homelab-docs](https://github.com/greenbeanorg/homelab-docs)** — the runbooks indexed above.
+**[homelab](https://github.com/greenbeanorg/homelab)** — sanitized configs and automation.
 
 ---
-Ormond Beach, FL · open to remote syseng roles
+Ormond Beach, FL · open to remote systems / infrastructure engineering roles
