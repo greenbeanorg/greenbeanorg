@@ -28,8 +28,7 @@ Ansible · Python · NetBox · Uptime Kuma · restic · NUT · Wazuh · Git
 ### System Troubleshooting
 | Doc | Covers |
 | --- | --- |
-| [SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md](SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md) | Root-cause runbook for a full hypervisor hang on swearengen (i5-10600K/48GB, primary Proxmox host) traced to 
-a wedged USB controller shared between the UPS and other USB peripherals.
+| [SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md](https://github.com/greenbeanorg/homelab-docs/blob/SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md) | Root-cause runbook for a full hypervisor hang on swearengen (i5-10600K/48GB, primary Proxmox host) traced to a wedged USB controller shared between the UPS and other USB peripherals.
 
 ### Monitoring & inventory
 
