@@ -28,7 +28,7 @@ Ansible · Python · NetBox · Uptime Kuma · restic · NUT · Wazuh · Git
 ### System Troubleshooting
 | Doc | Covers |
 | --- | --- |
-| [SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md) | Root-cause runbook for a full hypervisor hang on swearengen (i5-10600K/48GB, primary Proxmox host) traced to a wedged USB controller shared between the UPS and other USB peripherals.
+| [SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md) | Resolved. Root-cause runbook for a full hypervisor hang traced to a wedged USB controller shared between the UPS and other peripherals — fix was relocating the UPS to a dedicated host, see UPS.md
 
 ### Monitoring & inventory
 
@@ -46,7 +46,7 @@ Ansible · Python · NetBox · Uptime Kuma · restic · NUT · Wazuh · Git
 | [TRUENAS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md) | 30 TB migration, mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 — PCIe SATA controller passthrough, pool and dataset design, dual SMB/NFS shares under a unified identity |
 | [SMART-DOCTOR.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SMART-DOCTOR.md) | smartmontools health baseline and extended self-test management across the 4 × 10 TB pool |
 | [TRUENAS-UPS-REPORTING.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS-UPS-REPORTING.md) | Root-causing blank UPS charts under NUT netclient mode (NAS-132924) — a config override that avoids the immutable rootfs and survives OS upgrades |
-| [UPS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/UPS.md) | UPS monitoring conversion from PowerPanel (`pwrstat`) to NUT |
+| [UPS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/UPS.md) | UPS monitoring via NUT, primary relocated to a dedicated Raspberry Pi with staggered shutdown ordering across three hosts (storage first, hypervisor last) |
 
 Every doc follows the same shape: summary block, numbered sections, a known-limitations section
 where the honest tradeoffs go, and a quick-reference table for the things you look up at 2am.
