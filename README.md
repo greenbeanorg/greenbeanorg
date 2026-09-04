@@ -25,6 +25,12 @@ Ansible · Python · NetBox · Uptime Kuma · restic · NUT · Wazuh · Git
 | [WIREGUARD.md](https://github.com/greenbeanorg/homelab-docs/blob/main/WIREGUARD.md) | Hub-and-spoke overlay through a cloud instance so neither residential site needs inbound reachability — subnet routing plus roaming full-tunnel clients |
 | [IPV6.md](https://github.com/greenbeanorg/homelab-docs/blob/main/IPV6.md) | Per-VLAN `/64` allocation plan out of the delegated prefix |
 
+### System Troubleshooting
+| Doc | Covers |
+| --- | --- |
+| [SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md](SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md) | Root-cause runbook for a full hypervisor hang on swearengen (i5-10600K/48GB, primary Proxmox host) traced to 
+a wedged USB controller shared between the UPS and other USB peripherals.
+
 ### Monitoring & inventory
 
 | Runbook | Covers |
