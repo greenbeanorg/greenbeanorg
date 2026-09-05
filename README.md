@@ -145,7 +145,6 @@ touches name resolution. Full design and rebuild procedure:
 ## Repositories
 
 **[homelab-docs](https://github.com/greenbeanorg/homelab-docs)** — the runbooks indexed above.
-**[homelab](https://github.com/greenbeanorg/homelab)** — sanitized configs and automation.
 
 ---
 Ormond Beach, FL · open to remote systems / infrastructure engineering roles
