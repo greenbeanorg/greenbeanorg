@@ -28,6 +28,7 @@ Ansible · Python · NetBox · Uptime Kuma · restic · NUT · Wazuh · Git
 ### System Troubleshooting
 | Doc | Covers |
 | --- | --- |
+| [SWEARENGEN-VMBR0-INTRA-BRIDGE-FORWARDING-BUG-2026-09.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SWEARENGEN-VMBR0-INTRA-BRIDGE-FORWARDING-BUG-2026-09.md) | Workaround in place. Same-host VM-to-VM traffic silently dropped by the local bridge for one VM pair — every layer from netfilter to the physical switch ruled out; fixed by routing the flow through the router instead |
 | [SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md) | Resolved. Root-cause runbook for a full hypervisor hang traced to a wedged USB controller shared between the UPS and other peripherals — fix was relocating the UPS to a dedicated host, see UPS.md
 
 ### Monitoring & inventory
