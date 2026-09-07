@@ -28,6 +28,7 @@ Ansible · Python · NetBox · Uptime Kuma · restic · NUT · Wazuh · Git
 | Doc | Covers |
 | --- | --- |
 | [UPTIME-KUMA.md](UPTIME-KUMA.md) | Declarative availability monitoring — monitors defined in YAML and reconciled into Uptime Kuma by a Python script, so the monitor set is version-controlled rather than click-configured |
+| [PIHOLE-KUMA-AUTH-OUTAGE.md](PIHOLE-KUMA-AUTH-OUTAGE.md) | Pi-hole v6 session-auth outage — root cause, Push monitor migration, session-leak fix |
 
 ### Networking
 | Doc | Covers |
