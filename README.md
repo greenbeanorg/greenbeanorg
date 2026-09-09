@@ -1,4 +1,4 @@
-# Systems Engineer — Network & Infrastructure
+# Network & Infrastructure
 
 Multi-site Linux infrastructure lab: three Proxmox hosts across two sites, OPNsense edge routing
 over XGS-PON fiber, ZFS on TrueNAS SCALE, a WireGuard overlay, and a containerized service stack.
@@ -43,6 +43,7 @@ Ansible · Terraform · Python · NetBox · Uptime Kuma · restic · NUT · Wazu
 ### Storage
 | Doc | Covers |
 | --- | --- |
+| [NVME-HEALTH-CHECK.md](https://github.com/greenbeanorg/homelab-docs/NVME-HEALTH-CHECK.md) | A script to briefly check the health of proxmox hosts nvme drives
 | [TRUENAS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md) | 30 TB storage migration — mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1, with PCIe SATA controller passthrough, pool and dataset design, and dual SMB/NFS shares under a unified identity |
 | [SMART-DOCTOR.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SMART-DOCTOR.md) | Using smartmontools to establish a base health for the 4 x 10TB NAS drives.
 | [TRUENAS-UPS-REPORTING.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS-UPS-REPORTING.md) | Why the TrueNAS reporting page stays blank when NUT runs in netclient mode (NAS-132924) — the charts.d module that assumes a local `upsd`, a config override that fixes it without touching the immutable rootfs, and an init script to survive OS upgrades |
