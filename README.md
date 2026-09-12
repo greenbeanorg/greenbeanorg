@@ -44,7 +44,7 @@ Ansible · Terraform · Python · NetBox · Uptime Kuma · restic · NUT · Wazu
 ### Storage
 | Doc | Covers |
 | --- | --- |
-| [RESTIC-BACKUP.md](https://github.com/greenbeanorg/homelab-docs/blob/main/RESTIC-BACKUP.md) Restic off-site backups
+| [RESTIC-BACKUP.md](https://github.com/greenbeanorg/homelab-docs/blob/main/RESTIC-BACKUP.md) | Restic off-site backups
 | [NVME-HEALTH-CHECK.md](https://github.com/greenbeanorg/homelab-docs/NVME-HEALTH-CHECK.md) | A script to briefly check the health of proxmox hosts nvme drives
 | [TRUENAS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md) | 30 TB storage migration — mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1, with PCIe SATA controller passthrough, pool and dataset design, and dual SMB/NFS shares under a unified identity |
 | [SMART-DOCTOR.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SMART-DOCTOR.md) | Using smartmontools to establish a base health for the 4 x 10TB NAS drives.
