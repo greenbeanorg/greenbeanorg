@@ -1,4 +1,4 @@
-# Andy Alexander — Linux Systems Engineer
+# Andy Alexander — Linux Systems and Infrastructure
 
 Multi-site Linux infrastructure lab: three Proxmox hosts across two sites, OPNsense
 edge routing over XGS-PON fiber, ZFS on TrueNAS SCALE, a WireGuard overlay, and a
