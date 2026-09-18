@@ -13,7 +13,7 @@ Multi-site homelab infrastructure, documented as production-style runbooks. I'm 
 
 ## Network at a glance
 
-```
+```mermaid
 flowchart TB
     INET((Internet<br/>XGS-PON Fiber))
     ONT[XGS-PON ONT-on-a-stick<br/>SFP+ module]
