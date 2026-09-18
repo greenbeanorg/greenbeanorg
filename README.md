@@ -1,66 +1,73 @@
-# Andy Alexander — Linux Systems and Infrastructure
+# greenbeanorg — Andy's Homelab
 
-Multi-site Linux infrastructure lab: three Proxmox hosts across two sites, OPNsense
-edge routing over XGS-PON fiber, ZFS on TrueNAS SCALE, a WireGuard overlay, and a
-containerized service stack. Everything here is real and running — not a demo.
+Multi-site homelab infrastructure, documented as production-style runbooks. I'm a Linux systems administrator and this is where I design, break, fix, and document infrastructure.
 
-**Portfolio:** [greenbean.org](https://greenbean.org) — write-ups, selected work, resume
-**Documentation:** [homelab-docs](https://github.com/greenbeanorg/homelab-docs) — 23 runbooks, ~7,900 lines, each recording what was built, why, what broke, and how to rebuild it from nothing
+**Everything here is real and running** — three Proxmox hosts across two sites, ZFS storage on TrueNAS SCALE, OPNsense edge routing over XGS-PON fiber, automated verified backups, and a containerized service stack.
 
----
+## Repositories
 
-## Featured runbooks
-
-**Full hypervisor hang — root cause analysis**
-Problem: complete lockup of the primary Proxmox host.
-Investigation: USB subsystem, kernel logs, and shared peripheral load traced across the host.
-Root cause: a wedged USB controller shared between the UPS and other USB peripherals.
-Resolution: moved UPS monitoring off the host entirely.
-→ [SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SWEARENGEN-USB-CONTROLLER-HANG-2026-09.md)
-
-**Same-host VM networking failure**
-Problem: one specific VM-to-VM TCP flow silently dropped.
-Investigation: firewall, VLAN, FDB, and physical network state checked clean at every layer.
-Finding: `vmbr0` intra-bridge forwarding behavior for that VM pair.
-Status: workaround in place (routed through OPNsense); root cause still open.
-→ [SWEARENGEN-VMBR0-INTRA-BRIDGE-FORWARDING-BUG-2026-09.md](https://github.com/greenbeanorg/homelab-docs/blob/main/SWEARENGEN-VMBR0-INTRA-BRIDGE-FORWARDING-BUG-2026-09.md)
-
-**30 TB storage migration**
-From mdadm RAID5 to TrueNAS SCALE / ZFS RAIDZ1, including PCIe SATA controller
-passthrough, pool and dataset design, and dual SMB/NFS shares under one identity.
-→ [TRUENAS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/TRUENAS.md)
-
-**Redundant DNS across separate failure domains**
-Two Pi-hole resolvers, deliberately placed so neither shares a failure domain with
-the other — advertised via Kea DHCPv4 option 6, with a documented static-host audit
-procedure and Teleporter parity between them.
-→ [DNS.md](https://github.com/greenbeanorg/homelab-docs/blob/main/DNS.md)
-
-Full index of all 23 runbooks: [homelab-docs](https://github.com/greenbeanorg/homelab-docs)
-
----
-
-## Stack
-
-| | |
+| Repo | What it is |
 | --- | --- |
-| **Linux** | Debian, Rocky, Fedora, Armbian |
-| **Virtualization** | Proxmox VE, KVM/LXC |
-| **Networking** | OPNsense, MikroTik RouterOS, VLANs, WireGuard, Kea DHCP |
-| **DNS** | Pi-hole, Unbound |
-| **Storage** | ZFS, TrueNAS SCALE, NFS/SMB |
-| **Automation** | Bash, Python, Ansible, Terraform |
-| **Monitoring** | Uptime Kuma, NetBox |
-| **Backup** | restic, NUT |
-| **Ops** | Git, Docker Compose |
+| [homelab-docs](https://github.com/greenbeanorg/homelab-docs) | Runbooks and design docs: storage, backup, networking, power, services |
+| [homelab](https://github.com/greenbeanorg/homelab) | Sanitized configs: Docker Compose stacks, NUT, restic scripts, tooling |
 
-## Current work
+## Network at a glance
 
-- Ansible fleet management — baseline, NUT, restic, and Docker host roles
-- Extending Terraform coverage across the rest of the Proxmox fleet
-- Prometheus + Grafana + node_exporter, alongside Uptime Kuma
-- Rebuilding off-site restic backups following the TrueNAS/ZFS migration
+```
+flowchart TB
+    INET((Internet<br/>XGS-PON Fiber))
+    ONT[XGS-PON ONT-on-a-stick<br/>SFP+ module]
+
+    subgraph SW [MikroTik CRS310-8G+2S+ — RouterOS]
+        BW[bridge-WAN<br/>SFP+ cage + 1 port]
+        BL[bridge-LAN<br/>remaining ports]
+    end
+
+    subgraph WU [wu — Proxmox host, ODROID-H3]
+        FW[OPNsense VM<br/>Router / Firewall]
+    end
+
+    subgraph LAN [Local Network]
+        PH[Pi-hole DNS<br/>ODROID-XU4]
+        SW1[swearengen<br/>Proxmox Host + TrueNAS SCALE VM<br/>ZFS RAIDZ1 pool — PCIe SATA passthrough]
+        FARN[farnum<br/>Plex Media Server VM over NFS]
+        HA[Home Assistant VM]
+    end
+
+    subgraph REMOTE [Remote Site]
+        RPX[Remote Proxmox<br/>Pi-hole + LinuxGSM game server]
+    end
+
+    VPS[vps1<br/>Off-site restic backup target — SFTP]
+
+    INET --- ONT --- BW
+    BW ---|"wu NIC 1 → WAN vNIC"| FW
+    FW ---|"LAN vNIC → wu NIC 2"| BL
+    BL --- LAN
+    LAN -. WireGuard/SSH .- REMOTE
+    LAN -. restic over SFTP .- VPS
+```
+
+**Traffic path:** fiber terminates on the ONT SFP+ in the switch's isolated **bridge-WAN**, which hands off to a dedicated NIC on `wu`; the OPNsense VM routes/firewalls and sends LAN-bound traffic out a second NIC back into the switch's **bridge-LAN** — router-on-a-VM with a physical hairpin through the CRS310.
+
+## Current projects
+
+- **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
+- **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
+
+## Planned
+
+- **Terraform** — declarative provisioning for new Proxmox VMs going forward
+
+## Recently completed
+
+- VLAN segmentation — flat L2 network redesigned into trust zones on the CRS310
+- 30TB storage migration: mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough ([runbook](https://github.com/greenbeanorg/homelab-docs))
+- SSHFS → NFS for all cross-host storage access
+- Automated restic backups across all sites with 90-day retention and scheduled integrity verification
+- PowerPanel (pwrstat) → NUT UPS monitoring conversion (in progress, one host complete)
+- Early adopter of the XGS-PON ONT-on-a-stick guide ([pon.wiki guide](https://pon.wiki/guides/masquerade-as-the-att-inc-bgw320-500-505-with-the-was-110/))
 
 ---
 
-Ormond Beach, FL · open to remote Linux systems administration / systems engineering roles
+📫 andy.alexander@gmail.com · Ormond Beach, FL · open to remote systems roles
