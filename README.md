@@ -70,4 +70,4 @@ flowchart TB
 
 ---
 
-📫 REDACTED · Ormond Beach, FL · open to remote systems roles
+📫 https://linkedin.com/in/andy-alexander-linux · Ormond Beach, FL · open to remote systems roles
