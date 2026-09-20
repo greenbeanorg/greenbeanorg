@@ -1,0 +1,17 @@
+#!/bin/sh
+TARGET_HASH="e56439a9faef4ec2898cf9f5fc27f32b8fcf8773ad927c9a9132b4ade25601fe"
+FOUND=0
+
+for found_email in $(git diff --cached -U0 | grep -E "^\+" | sed 's/^.//' | grep -oE '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'); do
+    found_hash=$(printf '%s' "$found_email" | sha256sum | cut -d' ' -f1)
+    if [ "$found_hash" = "$TARGET_HASH" ]; then
+        FOUND=1
+    fi
+done
+
+if [ "$FOUND" = "1" ]; then
+    echo "ERROR: commit blocked — personal email address found in staged changes."
+    exit 1
+fi
+
+exit 0
