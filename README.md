@@ -53,12 +53,9 @@ flowchart TB
 
 ## Current projects
 
+- **Terraform** — declarative provisioning for new Proxmox VMs going forward
 - **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
 - **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
-
-## Planned
-
-- **Terraform** — declarative provisioning for new Proxmox VMs going forward
 
 ## Recently completed
 
