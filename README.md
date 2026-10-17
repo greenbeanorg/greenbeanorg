@@ -53,12 +53,15 @@ flowchart TB
 
 ## Current projects
 
+- **Kea MCP server** — read-only Model Context Protocol tools (lease lookup, pool utilization, health) over the Kea DHCP API
+- **Nested vSphere 8 lab** — ESXi + vCenter on Proxmox across two hosts: vDS, NFS datastore, vMotion, HA ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/VSPHERE-NESTED-LAB.md))
 - **Terraform** — declarative provisioning for new Proxmox VMs going forward
 - **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
 - **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
 
 ## Recently completed
 
+- Kea DHCP lab — ISP-style relayed DHCPv4 on Rocky Linux 9 (SELinux enforcing): OPNsense relay with option 82, circuit-id reservations, PostgreSQL lease backend, Kea HTTP API, and a perfdhcp load test to saturation ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/KEA-DHCP-LAB.md))
 - VLAN segmentation — flat L2 network redesigned into trust zones on the CRS310
 - 30TB storage migration: mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough ([runbook](https://github.com/greenbeanorg/homelab-docs))
 - SSHFS → NFS for all cross-host storage access
