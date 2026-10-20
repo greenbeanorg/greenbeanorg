@@ -53,8 +53,9 @@ flowchart TB
 
 ## Current projects
 
-- **Kea MCP server** — read-only Model Context Protocol tools (lease lookup, pool utilization, health) over the Kea DHCP API
 - **Nested vSphere 8 lab** — ESXi + vCenter on Proxmox across two hosts: vDS, NFS datastore, vMotion, HA ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/VSPHERE-NESTED-LAB.md))
+- **Kea DHCP high availability** — hot-standby pair on Kea 3.0 across two Proxmox hosts, each with its own PostgreSQL lease database; configs in Git with a drift check, and a scripted failover test: ~58 s failover, a client served by the standby, its lease synced back on failback ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/KEA-DHCP-HA.md))
+- **Kea MCP server** — read-only Model Context Protocol tools over the Kea DHCP API: lease lookup, pool utilization, health, and `ha_status`, which checks both HA peers and flags an unreachable peer, split brain, or no peer serving
 - **Terraform** — declarative provisioning for new Proxmox VMs going forward
 - **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
 - **Monitoring modernization** — Prometheus + Grafana + node_exporter fleet-wide
