@@ -53,8 +53,7 @@ flowchart TB
 
 ## Current projects
 
-- **Nested vSphere 8 lab** — ESXi + vCenter on Proxmox across two hosts: vDS, NFS datastore, vMotion, HA ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/VSPHERE-NESTED-LAB.md))
-- **Kea DHCP high availability** — hot-standby pair on Kea 3.0 across two Proxmox hosts, each with its own PostgreSQL lease database; configs in Git with a drift check, and a scripted failover test: ~58 s failover, a client served by the standby, its lease synced back on failback ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/KEA-DHCP-HA.md))
+- **Nested vSphere 8 lab** — two-host ESXi 8 cluster with vCenter on Proxmox, built with the CLI installer and `govc`: distributed switch, NFS shared datastore, shared-nothing and shared-storage vMotion with zero packet loss, and vSphere HA with a tested host failure — VM restarted on the surviving host ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/VSPHERE-NESTED-LAB.md))
 - **Kea MCP server** — read-only Model Context Protocol tools over the Kea DHCP API: lease lookup, pool utilization, health, and `ha_status`, which checks both HA peers and flags an unreachable peer, split brain, or no peer serving
 - **Terraform** — declarative provisioning for new Proxmox VMs going forward
 - **Ansible fleet management** — converting host configuration (baseline, NUT, restic, Docker hosts) to roles across all sites
@@ -62,6 +61,7 @@ flowchart TB
 
 ## Recently completed
 
+- Kea DHCP high availability — hot-standby pair on Kea 3.0 across two Proxmox hosts, each with its own PostgreSQL lease database; configs in Git with a drift check, and a scripted failover test: ~58 s failover, a client served by the standby, its lease synced back on failback ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/KEA-DHCP-HA.md))
 - Kea DHCP lab — ISP-style relayed DHCPv4 on Rocky Linux 9 (SELinux enforcing): OPNsense relay with option 82, circuit-id reservations, PostgreSQL lease backend, Kea HTTP API, and a perfdhcp load test to saturation ([runbook](https://github.com/greenbeanorg/homelab-docs/blob/main/KEA-DHCP-LAB.md))
 - VLAN segmentation — flat L2 network redesigned into trust zones on the CRS310
 - 30TB storage migration: mdadm RAID5 → TrueNAS SCALE / ZFS RAIDZ1 with PCIe SATA passthrough ([runbook](https://github.com/greenbeanorg/homelab-docs))
