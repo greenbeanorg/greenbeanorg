@@ -10,7 +10,6 @@ Multi-site homelab infrastructure, documented as production-style runbooks. I'm 
 | --- | --- |
 | [homelab-automation](https://github.com/greenbeanorg/homelab-automation) | Runbooks and IaC - terraform and ansible configuration files |
 | [homelab-docs](https://github.com/greenbeanorg/homelab-docs) | Runbooks and design docs: storage, backup, networking, power, services |
-| [homelab](https://github.com/greenbeanorg/homelab) | Sanitized configs: Docker Compose stacks, NUT, restic scripts, tooling |
 
 ## Network at a glance
 
